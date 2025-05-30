@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio | To-Do App | Product Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header, nav, footer { background-color: #333; color: white; padding: 1rem; text-align: center; }
+    nav a { color: white; margin: 0 1rem; text-decoration: none; }
+    section { padding: 2rem; }
+    .project, .product, .todo-item { border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; }
+    .product { display: none; }
+    .flex { display: flex; flex-wrap: wrap; gap: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Shivam Kumar</h1>
+    <p>Web Developer Portfolio</p>
+  </header>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+    <a href="#todo">To-Do App</a>
+    <a href="#products">Products</a>
+  </nav>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I am a B.Tech CSE student from MCE Motihari with interests in web development and cybersecurity.</p>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="project">
+      <h3>Portfolio Website</h3>
+      <p>Responsive multi-page site to showcase skills and work.</p>
+    </div>
+    <div class="project">
+      <h3>To-Do App with Local Storage</h3>
+      <p>Helps users track tasks, with persistence.</p>
+    </div>
+    <div class="project">
+      <h3>Product Listing Page</h3>
+      <p>Product filter and sort functionality using JavaScript.</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email: ershivamsahucs@gmail.com</p>
+    <p>GitHub: <a href="https://github.com/codebyshivamsahu">codebyshivamsahu</a></p>
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/kumar-shivam-sahu-a7ab26253/">Shivam's LinkedIn</a></p>
+  </section>
+
+  <section id="todo">
+    <h2>To-Do List</h2>
+    <input type="text" id="todoInput" placeholder="Add a task">
+    <button onclick="addTodo()">Add</button>
+    <ul id="todoList"></ul>
+  </section>
+
+  <section id="products">
+    <h2>Product Listing</h2>
+    <select id="filter" onchange="filterProducts()">
+      <option value="all">All</option>
+      <option value="electronics">Electronics</option>
+      <option value="books">Books</option>
+    </select>
+    <select id="sort" onchange="sortProducts()">
+      <option value="rating">Rating</option>
+      <option value="price">Price</option>
+    </select>
+
+    <div class="flex" id="productContainer">
+      <div class="product" data-category="electronics" data-rating="4.5" data-price="300">
+        <h4>Smartphone</h4>
+        <p>Price: ₹300 | Rating: 4.5</p>
+      </div>
+      <div class="product" data-category="books" data-rating="4.8" data-price="100">
+        <h4>JavaScript Book</h4>
+        <p>Price: ₹100 | Rating: 4.8</p>
+      </div>
+      <div class="product" data-category="electronics" data-rating="4.2" data-price="500">
+        <h4>Headphones</h4>
+        <p>Price: ₹500 | Rating: 4.2</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Shivam Kumar. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // To-Do List
+    const todoList = document.getElementById('todoList');
+    const todos = JSON.parse(localStorage.getItem('todos')) || [];
+    todos.forEach(task => addTodoItem(task));
+
+    function addTodo() {
+      const input = document.getElementById('todoInput');
+      const task = input.value.trim();
+      if (task) {
+        addTodoItem(task);
+        todos.push(task);
+        localStorage.setItem('todos', JSON.stringify(todos));
+        input.value = '';
+      }
+    }
+
+    function addTodoItem(task) {
+      const li = document.createElement('li');
+      li.textContent = task;
+      todoList.appendChild(li);
+    }
+
+    // Product Listing
+    const products = Array.from(document.querySelectorAll('.product'));
+    products.forEach(p => p.style.display = 'block');
+
+    function filterProducts() {
+      const filterValue = document.getElementById('filter').value;
+      products.forEach(p => {
+        p.style.display = (filterValue === 'all' || p.dataset.category === filterValue) ? 'block' : 'none';
+      });
+    }
+
+    function sortProducts() {
+      const sortValue = document.getElementById('sort').value;
+      const container = document.getElementById('productContainer');
+      const sorted = [...products].sort((a, b) => {
+        const valA = parseFloat(a.dataset[sortValue]);
+        const valB = parseFloat(b.dataset[sortValue]);
+        return valA - valB;
+      });
+      container.innerHTML = '';
+      sorted.forEach(p => container.appendChild(p));
+    }
+  </script>
+</body>
+</html>

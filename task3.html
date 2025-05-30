@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task 3 - Advanced Styling and JavaScript</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .section {
+      padding: 30px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .responsive {
+      background-color: #e0f7fa;
+    }
+
+    .quiz {
+      background-color: #fff3e0;
+    }
+
+    .api {
+      background-color: #f3e5f5;
+    }
+
+    @media (max-width: 768px) {
+      .responsive {
+        background-color: #ffe082;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .responsive {
+        background-color: #ce93d8;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Section 1: Responsive Design -->
+  <div class="section responsive">
+    <h1>Responsive Design Example</h1>
+    <p>Resize the browser window to see how the background and font size change based on screen width.</p>
+  </div>
+
+  <!-- Section 2: Interactive Quiz -->
+  <div class="section quiz">
+    <h2>Quiz: JavaScript Basics</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Submit Quiz</button>
+    <p id="result"></p>
+  </div>
+
+  <!-- Section 3: Fetch API -->
+  <div class="section api">
+    <h2>Random Joke Generator</h2>
+    <p id="joke">Click the button to get a joke!</p>
+    <button onclick="getJoke()">Get Joke</button>
+  </div>
+
+  <script>
+    // Quiz Data
+    const quizData = [
+      {
+        question: "What does HTML stand for?",
+        options: ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"],
+        answer: "Hyper Text Markup Language"
+      },
+      {
+        question: "What year was JavaScript created?",
+        options: ["1995", "2005", "2015"],
+        answer: "1995"
+      }
+    ];
+
+    // Display Quiz
+    const quizContainer = document.getElementById('quiz');
+    quizData.forEach((q, index) => {
+      const questionEl = document.createElement('div');
+      questionEl.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+      q.options.forEach(opt => {
+        questionEl.innerHTML += `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label><br>`;
+      });
+      quizContainer.appendChild(questionEl);
+    });
+
+    // Submit Quiz
+    function submitQuiz() {
+      let score = 0;
+      quizData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && selected.value === q.answer) {
+          score++;
+        }
+      });
+      document.getElementById('result').innerText = `You got ${score}/${quizData.length} correct.`;
+    }
+
+    // Fetch Joke
+    function getJoke() {
+      fetch('https://official-joke-api.appspot.com/random_joke')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('joke').innerText = `${data.setup} — ${data.punchline}`;
+        })
+        .catch(error => {
+          document.getElementById('joke').innerText = "Failed to load joke.";
+          console.error(error);
+        });
+    }
+  </script>
+
+</body>
+</html>
